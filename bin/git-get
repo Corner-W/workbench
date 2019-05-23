@@ -1,0 +1,19 @@
+#!/bin/bash
+# Wrapper of `git clone` to clone into an author/repo dir
+
+GIT_URL=""
+
+# Detect git url from input arguments
+for x in "$@"; do
+    if [[ $x == http*//*/* ]] || [[ $x == *@*:* ]]; then
+        GIT_URL="$x"
+        break
+    fi
+done
+
+[[ -n $GIT_URL ]] || { echo "Git url required"; exit 1; }
+REPO_NAME=$(basename ${GIT_URL%.git})
+AUTHOR=$(basename ${GIT_URL%/*})
+AUTHOR=${AUTHOR##*:}
+
+git clone "$@" $AUTHOR/$REPO_NAME

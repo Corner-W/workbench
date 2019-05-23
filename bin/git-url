@@ -1,0 +1,23 @@
+#!/bin/bash
+# Convert git https or ssh url to clickable hyperlink
+
+FILENAME=${1:-""}
+
+REPO_URLS=$(git remote -v \
+    | perl -pe 's,(.*\sgit@|.*://|\.git .*),,g; s,:,/,' \
+    | sort -u)
+
+BRANCH=$(git symbolic-ref HEAD 2>/dev/null)
+BRANCH=${BRANCH#refs/heads/}
+
+if [[ -n $FILENAME ]]; then
+    [[ -f $FILENAME ]] || { echo "No such file $FILENAME" >&2; exit 1; }
+    LEAF=$(git log -1 --name-only --pretty=format: $FILENAME)
+    for URL in $REPO_URLS; do
+        echo $URL/blob/$BRANCH/$LEAF
+    done
+else
+    for URL in $REPO_URLS; do
+        echo $URL
+    done
+fi

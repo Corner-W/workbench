@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Download video with youtube-dl [1] and merge parts with ffmpeg [2]
+#
+# [1] https://github.com/rg3/youtube-dl
+# [2] https://www.ffmpeg.org
+
+set -o errexit
+set -o nounset
+
+readonly SELF_DIR=$(cd $(dirname $0) && pwd)
+readonly TAG="---___---"  # special tag to identify the file just downloaded
+
+function merge
+{
+    local output=${1:?}
+    shift
+    local f
+    local file=files-$$.txt
+
+    trap "rm  -f $file" RETURN
+
+    for f in "$@"; do echo "file '$f'"; done > $file
+    cat $file
+    ffmpeg -f concat -i $file -c copy "$output"
+}
+
+readonly URL=${1:-}
+readonly NAME=${2:-"%(title)s"}
+
+[[ -n $URL ]] || {
+    echo "Usage: $0 <url> <name> [youtube-dl options]"
+    exit 1
+}
+
+shift
+[[ -z $NAME ]] || shift
+
+# Now the rest args are youtube-dl options
+youtube-dl -o "${NAME}${TAG}%(id)s.%(ext)s" "$@" "$URL"
+
+# Detect destination name, realname and file extension
+DEST=$(/bin/ls *${TAG}*part1.*)
+REALNAME=${DEST%%${TAG}*}
+EXT=${DEST##*.}
+
+# If we have a 'part2' file, then merge it with ffmpeg, otherwise just rename
+# downloaded file.  Watch out possible spaces in filename!
+#
+if ls "${REALNAME}"*part2.${EXT} >& /dev/null; then
+    merge "${REALNAME}".${EXT} "${REALNAME}${TAG}"*part*.${EXT}
+else
+    mv "${REALNAME}${TAG}"*part1.${EXT} "${REALNAME}".${EXT}
+fi

@@ -1,0 +1,30 @@
+patch:
+  preset_color_schemes:
+    solarized_light:
+      back_color: 0xe3f6fd
+      border_color: 0xe2e2e2
+      candidate_text_color: 0x837b65
+      comment_text_color: 0xeeeeee
+      hilited_back_color: 0xe3f6fd
+      hilited_candidate_back_color: 0xce7539
+      hilited_candidate_text_color: 0xffffff
+      hilited_comment_text_color: 0xd5e8ee
+      hilited_text_color: 0x888888
+      label_color: 0xa1a193
+      name: "solarized_light"
+      text_color: 0x666666
+  style:
+    border_width: 0
+    border_height: 0
+    font_point: 14
+    horizontal: true
+    font_face: PTSans-Caption
+    corner_radius: 3
+    color_scheme: solarized_light
+  us_keyboard_layout: true
+  app_options:
+    org.vim.MacVim: &a
+      ascii_mode: false
+    com.googlecode.iterm2: *a
+    com.runningwithcrayons.Alfred-2: *a
+    com.blacktree.Quicksilver: *a

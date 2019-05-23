@@ -1,0 +1,130 @@
+# User information
+set realname = "FIXME"
+set from = FIXME
+
+# OS Stuff
+set tmpdir = /tmp
+set print_split = yes
+#set print_command = "a2ps -1 -o - | lpr" # Default (override in per-host file)
+
+# IMAP
+set mail_check = 60
+set timeout = 15
+set imap_list_subscribed = yes
+set imap_user = FIXME
+set imap_passive = no
+set folder = imaps://FIXME.example.com/
+set spoolfile = imaps://FIXME.example.com/
+set header_cache = ~/.mutt/cache/headers
+set message_cachedir = ~/.mutt/cache
+set imap_keepalive = 300
+set mail_check = 120
+
+set smtp_url = smtp://FIXME.example.com
+
+# XXX: not supported by default
+# set sidebar_visible = no
+# set sidebar_width = 25
+# set sidebar_delim = ' | '
+# set sidebar_sort = no
+
+# Index Menu
+set sort=threads
+set sort_aux = date
+set strict_threads = no
+set wrap_search = yes
+set mark_old = no           # Do not mark unread new messages as 'old'
+set collapse_unread = no    # Do not let me collapse threads with unread msgs
+set uncollapse_jump = yes   # When uncollapsing, jump to new msgs
+set index_format="%4C %Z %{%b %d} %-15.15n (%4l) %s"
+
+# Message Display Options
+set smart_wrap = yes        # Wrap at word boundaries if possible
+set pager_index_lines = 25  # Show a few lines from the index above the msg
+set pager_stop = yes        # PgDown at bottom does not move to next message
+set markers = no            # Don't add "+" on wrapped lines (hard to copy)
+
+# Composing
+#set signature = "~/.signature"
+set editor = 'vim +/^$ "+normal j"' # Open vim one line past first blank line
+set fast_reply = yes
+set abort_nosubject = no
+set abort_unmodified = ask-yes
+
+# Replying
+set reply_self = no         # Reply to recipients, not to myself on my own msgs
+set indent_string = "> "
+set include = yes
+set attribution = "On %d, %n wrote:"
+set bounce_delivered = yes
+
+# Forwarding
+set forward_format = "Fw: %s"
+set forward_quote = yes
+
+# Folder and Mailbox
+set copy = yes              # Save copy of outgoing msgs
+set record = =Sent          # Where do we keep sent messages?
+set move = no
+set fcc_attach = yes        # Save outgoing attachments
+set fcc_clear = no          # Keep encryption/signatures
+set folder_format="%F %-8.8u %-8.8g %d %8s %N %f"
+
+# Headers
+set hdrs = yes              # ???
+set header = yes            # Headers in reply
+set edit_headers = yes      # Headers in editor
+
+# Sending
+#set write_bcc = yes
+set use_from = yes
+set envelope_from = yes
+
+# Key bindings
+bind  generic   gg      first-entry
+bind  generic   G       last-entry
+bind  generic   \Cf     next-page
+bind  generic   \Cb     previous-page
+bind  index     \Cf     next-page
+bind  index     \Cb     previous-page
+bind  index     [       previous-thread
+bind  index     ]       next-thread
+bind  index     gg      first-entry
+bind  index     G       last-entry
+bind  index     $       sync-mailbox
+bind  index     \Cr     imap-fetch-mail
+bind  index     <space> collapse-thread
+bind  index     <right> display-message
+macro index     <left>  "c?\t"   "Get Folder List"
+macro index     I       "c!\n"   "Go to INBOX"
+macro index     \\      ":set sidebar_visible=no\n"     "Close sidebar"
+macro index     |       ":set sidebar_visible=yes\n"    "Open sidebar"
+
+# Which boxes are checked for new mail?  Can be overriden in host-specific
+# config file.
+#
+mailboxes =INBOX
+mailboxes =00-meetings
+mailboxes =00-to-me
+mailboxes =FIXME
+mailboxes =Drafts
+mailboxes =Outbox
+mailboxes =Trash
+
+
+# autoview HTML mail using lynx -dump
+auto_view text/html
+alternative_order text/enriched text/plain text/html
+
+# Headers
+ignore *
+unignore From To Cc Subject Date Reply-To Newsgroups:
+unignore Organization Organisation
+unignore X-Mailer User-Agent X-Agent X-Newsreader
+unignore X-Bogosity X-Spam-Status
+hdr_order From: To: Cc: Date: Subject:
+
+# Colors
+color index     yellow  default "~N"
+color index     red     default "~T"
+color index     cyan    default "~v"

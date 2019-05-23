@@ -1,0 +1,45 @@
+#!/bin/bash
+#
+# List or switch git ids (user.name and user.email) defined in ~/.git-ids,
+# for example, define ~/.git-ids as below:
+#
+#   github ymattw@example.com Matthew Wang
+#   corp matt@example.org Matthew Y Wang
+#
+# Then you can run 'git-id github' to setup user.name and user.email to your
+# github account and run 'git-id corp' to switch to your corp account.
+
+set -o errexit
+set -o nounset
+
+readonly GIT_ID_FILE=~/.git-ids
+readonly ID=${1:-""}
+
+[[ -r $GIT_ID_FILE ]] || {
+    echo "$GIT_ID_FILE not found, define your ids as 'id email first last'" >&2
+    echo "there (one id per line) to switch id quickly" >&2
+    exit 0
+}
+
+[[ -n $ID ]] || {
+    echo "Current user:"
+    echo "    $(git config user.name) $(git config user.email)"
+    echo
+    echo "Available ids:"
+    cat $GIT_ID_FILE | sed 's/^/    /'
+    exit 0
+}
+
+BLANK="[[:blank:]]*"
+ID_LINE=$(grep -Eo "^${BLANK}${ID}${BLANK}.*" $GIT_ID_FILE) || {
+    echo "Id '$ID' not found in $GIT_ID_FILE" >&2
+    exit 1
+}
+
+set -- $ID_LINE
+
+: ${3:?"Incomplete config for id '$ID' in $GIT_ID_FILE"}
+
+git config user.email $2
+shift; shift
+git config user.name "$*"

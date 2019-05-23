@@ -1,0 +1,55 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+DIR="."
+PORT=8080
+
+function get_external_ip
+{
+    local os=$(uname -s)
+    local interface
+    local ip
+
+    case "$os" in
+        Darwin)
+            interface=$(/sbin/route -n get default | grep interface: | awk '{print $2}')
+            ip=$(/sbin/ifconfig $interface | grep -w inet | awk '{print $2}')
+            ;;
+        Linux)
+            ip=$(/sbin/ip route get 1.1.1.1 | sed -n 's/.*src \(.*\) \?$/\1/p')
+            ;;
+        *)
+            echo "Unsupported system '$os'" >&2
+            return 1
+            ;;
+    esac
+
+    [[ -n $ip ]] || return 1
+    echo $ip
+}
+
+while (( $# > 0 )); do
+    case "$1" in
+        -d|--dir)
+            DIR="$2"
+            shift; shift
+            ;;
+        -p|--port)
+            PORT="$2"
+            shift; shift
+            ;;
+        *)
+            echo "Unknow option '$1'" >&2
+            echo "Usage: $0 [-d|--dir dir] [-p|--port port]"
+            exit 1
+            ;;
+    esac
+done
+
+EXTERNAL_IP=$(get_external_ip)
+cd $DIR && DIR=$(pwd)
+
+echo "Serving $DIR as http://$(hostname -f):$PORT (http://$EXTERNAL_IP:$PORT)"
+python -m SimpleHTTPServer $PORT

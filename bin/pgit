@@ -1,0 +1,4 @@
+#!/bin/sh
+# Example usage: GIT_SOCKS5_PROXY=localhost:1081 pgit clone ...
+
+GIT_PROXY_COMMAND=git-proxy-wrapper git "$@"

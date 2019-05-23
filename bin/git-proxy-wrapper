@@ -1,0 +1,5 @@
+#!/bin/sh
+
+GIT_SOCKS5_PROXY=${GIT_SOCKS_PROXY:-"localhost:1080"}
+
+nc -x $GIT_SOCKS5_PROXY -X5 "$@"

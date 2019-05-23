@@ -1,0 +1,82 @@
+# My LS_COLORS preference
+
+# General
+BLK                   38;5;136
+CAPABILITY            38;5;136
+CHR                   38;5;136
+DIR                   38;5;33
+DOOR                  38;5;136
+EXEC                  38;5;40
+FIFO                  38;5;126
+FILE                  38;1;254
+LINK                  target
+MULTIHARDLINK         38;5;222;1
+
+NORMAL                38;1;254
+ORPHAN                38;5;196;4
+OTHER_WRITABLE        38;5;196
+SETGID                38;5;196
+SETUID                38;5;196
+SOCK                  38;5;126
+STICKY                38;5;112;4
+STICKY_OTHER_WRITABLE 38;5;112;3
+
+# Executables
+.sh                   38;5;112
+.bash                 38;5;112
+.pl                   38;5;112
+.py                   38;5;112
+.rb                   38;5;112
+
+# Temp files
+.o                    38;5;238
+.*~                   38;5;238
+.orig                 38;5;238
+.swp                  38;5;238
+.swo                  38;5;238
+.tmp                  38;5;238
+
+# Archives
+.gz                   38;5;210
+.tar                  38;5;210
+.tgz                  38;5;210
+.bz2                  38;5;210
+.zip                  38;5;210
+.jar                  38;5;210
+.rpm                  38;5;210
+.bin                  38;5;210
+
+# Common termcap
+TERM ansi
+TERM color-xterm
+TERM console
+TERM cygwin
+TERM gnome
+TERM gnome-256color
+TERM konsole
+TERM linux
+TERM putty
+TERM rxvt
+TERM rxvt-256color
+TERM rxvt-cygwin
+TERM rxvt-cygwin-native
+TERM rxvt-unicode
+TERM rxvt-unicode-256color
+TERM rxvt-unicode256
+TERM screen
+TERM screen-256color
+TERM screen-256color-bce
+TERM screen-bce
+TERM screen-w
+TERM screen.linux
+TERM screen.rxvt
+TERM terminator
+TERM vt100
+TERM xterm
+TERM xterm-16color
+TERM xterm-256color
+TERM xterm-88color
+TERM xterm-color
+TERM xterm-debian
+
+# vim:set ft=dircolors et sw=2:

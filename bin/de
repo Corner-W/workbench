@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker exec -it ${1:?} /bin/sh -c \
+    'if [ -x /bin/bash ]; then exec /bin/bash; else exec /bin/sh; fi'

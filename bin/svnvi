@@ -1,0 +1,3 @@
+#!/bin/sh
+
+svn diff --diff-cmd ~/bin/svndiff "$@"

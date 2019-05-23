@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/Applications/VirtualBox.app/Contents/MacOS/VBoxHeadless \
+    -s ${1?"vm name required"} &

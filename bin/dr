@@ -1,0 +1,63 @@
+#!/bin/bash
+
+[[ -n $1 ]] || {
+    cat << EOF
+Usage: $0 <image> [docker run options] [cmd...]"
+
+NOTE! '--rm' is implicit unless '--name' is provided
+
+Available images:
+
+$(docker images)
+EOF
+    exit 1
+}
+
+IMAGE="$1"; shift
+OPTS=()
+NAME=""
+
+while (( $# > 0 )); do
+    case $1 in
+        --name)
+            NAME="$2"
+            shift
+            ;;
+        --name=*)
+            NAME=${1##*=}
+            ;;
+        --rm|--*=*)
+            OPTS+=("$1")
+            ;;
+        -v|-e)
+            OPTS+=(-v "$2")
+            shift
+            ;;
+        *)
+            break  # break at first non option arg
+            ;;
+    esac
+    shift
+done
+
+OPTS+=(
+    -it
+    -P
+    -v /etc/localtime:/etc/localtime:ro
+    -v $HOME:$HOME
+    -w "$PWD"
+)
+
+if [[ -n $NAME ]]; then
+    OPTS+=(--name "$NAME" --hostname "$NAME")
+else
+    OPTS+=(--rm)
+fi
+
+if [[ $(ps -p ${SSH_AGENT_PID:-0} -o comm= 2>/dev/null) == ssh-agent ]] \
+        && [[ -S $SSH_AUTH_SOCK ]]; then
+    OPTS+=(-v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK:ro)
+    OPTS+=(-e SSH_AUTH_SOCK=$SSH_AUTH_SOCK)
+fi
+
+docker run "${OPTS[@]}" $IMAGE "${@:-/bin/bash}"

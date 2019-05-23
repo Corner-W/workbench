@@ -1,0 +1,43 @@
+# Matthew Wang's screenrc
+#
+# Run this to set it up:
+# curl -fksSL https://github.com/ymattw/profiles/raw/master/screenrc > ~/.screenrc
+#
+startup_message off
+defscrollback 9000
+autodetach on
+altscreen off
+nonblock on
+vbell off
+
+# Enable scrollback with mouse wheel/trackpad, verified with iTerm (Rremember
+# to enable related profile preference: Terminal -> "Save lines to scrollback
+# when an app status bar is present")
+#
+termcapinfo xterm* ti@:te@
+
+# %{WB}     lightwhite on lightblue
+# %-w       all window (number and title) up to current one
+# %{bW}     blue on lightwhite
+# %n %t     current window number and title
+# %f        flags of the window
+# %{-}      restore color attribute to just before last change
+# %+w       all window (number and title) after current one
+# %-12=     pad up to screen width - 12
+# %c        time in 24h
+# %D        short weekday name
+# %d        day number
+#
+hardstatus alwayslastline '%{WB}%-w%{bW}%n %t%f%{-}%+w %-12=%c %D %d'
+
+# PgUp to scroll up
+bindkey -k kP copy
+bind s
+# bind | split -v
+bind j focus down
+bind k focus up
+bind x remove
+bind _ only
+
+# screen -t dev           0 zsh
+# screen -t dev           1 zsh

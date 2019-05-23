@@ -1,0 +1,26 @@
+#!/bin/bash
+# Display major info of a docker container filtering by name
+
+NAME_PATTERN="${1:?}"
+
+function inspect
+{
+    local id=${1:?}
+
+    local name=$(docker inspect --format='{{.Name}}' $id)
+    local image=$(docker inspect --format='{{.Config.Image}}' $id)
+    local ip=$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $id)
+    local ports=$(docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}} {{$p}}->{{$conf}} {{end}}' $id)
+    local logpath=$(docker inspect --format='{{.LogPath}}' $id)
+
+    echo -e $'\e[32m'${name#/}$'\e[0m'" ($image)"
+    echo "  $ip $ports"
+    echo "  $logpath"
+}
+
+# Main
+IDS=$(docker ps | awk "/ [a-zA-Z0-9_-]*${NAME_PATTERN}[a-zA-Z0-9_-]*$/ {print \$1}")
+
+for ID in $IDS; do
+    inspect $ID
+done
